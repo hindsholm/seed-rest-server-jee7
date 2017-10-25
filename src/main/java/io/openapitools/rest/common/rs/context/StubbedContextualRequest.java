@@ -1,13 +1,13 @@
 package io.openapitools.rest.common.rs.context;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.BadRequestException;
 
 import io.openapitools.rest.common.core.context.Context;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +47,7 @@ public class StubbedContextualRequest extends ContextualRequest {
                 && request.getHeader("authorization").startsWith("Bearer")) {
             try {
                 String authHeader = request.getHeader("authorization");
-                String decoded = new String(Base64.decodeBase64(authHeader.substring(7)), "ISO-8859-1");
+                String decoded = new String(Base64.getDecoder().decode(authHeader.substring(7)), "ISO-8859-1");
                 String[] credentials = decoded.split(":");
                 if (credentials.length != 2) {
                     throw new BadRequestException("Authorization header existed with type 'Bearer' but contained no user/pass pair");
