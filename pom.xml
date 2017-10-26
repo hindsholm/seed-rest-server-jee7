@@ -58,10 +58,22 @@
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>2.26</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
             <version>2.26</version>
             <scope>test</scope>
-        </dependency>        
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>2.26</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -71,7 +83,62 @@
     </dependencies>
 
     <build>
-        <finalName>seed</finalName>
+        <finalName>sample</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.6.3</version>
+                <configuration>
+                    <container>
+                        <containerId>wildfly10x</containerId>
+                        <home>${WILDFLY_HOME}</home>
+                        <systemProperties>
+                            <log4j.configuration>
+                                file:/${project.basedir}/rest-services/target/generated-sources/config/local/log4j.xml
+                            </log4j.configuration>
+                            <config>${project.basedir}/rest-services/target/generated-sources/config/local</config>
+                            <hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+                        </systemProperties>
+                    </container>
+
+                    <configuration>
+                        <configfiles>
+                            <configfile>
+                                <file>${project.basedir}/src/test/wildfly/standalone.xml</file>
+                                <todir>/configuration</todir>
+                            </configfile>
+                        </configfiles>
+                        <properties>
+                            <cargo.servlet.port>7001</cargo.servlet.port>
+                            <cargo.jvmargs>-Xmx521m</cargo.jvmargs>
+                            <cargo.start.jvmargs>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9005</cargo.start.jvmargs>
+                            <cargo.servlet.users>
+                                advisor1:passw0rd:advisor|tx-system-update:passw0rd:tx-system|customer1:passw0rd:
+                            </cargo.servlet.users>
+                        </properties>
+                        <files>
+                            <file>
+                                <file>${project.basedir}/src/test/h2-data/account.h2.db</file>
+                            </file>
+                            <file>
+                                <file>${project.basedir}/src/test/h2-data/customer.h2.db</file>
+                            </file>
+                        </files>
+                    </configuration>
+
+                    <deployables>
+                        <deployable>
+                            <location>target/sample.war</location>
+                            <type>war</type>
+                            <properties>
+                                <context>/sample</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <properties>
