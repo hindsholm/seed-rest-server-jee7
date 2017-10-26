@@ -132,9 +132,27 @@
                             <properties>
                                 <context>/sample</context>
                             </properties>
+                            <pingURL>http://localhost:7001/sample/ping</pingURL>
+                            <pingTimeout>60000</pingTimeout>
                         </deployable>
                     </deployables>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>it.start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>it.stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>            
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
