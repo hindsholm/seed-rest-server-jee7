@@ -97,7 +97,6 @@
                             <log4j.configuration>
                                 file:/${project.basedir}/rest-services/target/generated-sources/config/local/log4j.xml
                             </log4j.configuration>
-                            <config>${project.basedir}/rest-services/target/generated-sources/config/local</config>
                             <hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
                         </systemProperties>
                     </container>
@@ -109,11 +108,8 @@
                             </configfile>
                         </configfiles>
                         <properties>
-                            <cargo.servlet.port>7001</cargo.servlet.port>
-                            <cargo.jvmargs>-Xmx521m</cargo.jvmargs>
-                            <cargo.start.jvmargs>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9005</cargo.start.jvmargs>
                             <cargo.servlet.users>
-                                advisor1:passw0rd:advisor|tx-system-update:passw0rd:tx-system|customer1:passw0rd:
+                                advisor1:passw0rd:advisor
                             </cargo.servlet.users>
                         </properties>
                         <files>
@@ -127,13 +123,7 @@
                     </configuration>
                     <deployables>
                         <deployable>
-                            <location>target/sample.war</location>
-                            <type>war</type>
-                            <properties>
-                                <context>/sample</context>
-                            </properties>
                             <pingURL>http://localhost:7001/sample/ping</pingURL>
-                            <pingTimeout>60000</pingTimeout>
                         </deployable>
                     </deployables>
                 </configuration>
